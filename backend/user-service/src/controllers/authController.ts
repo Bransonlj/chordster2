@@ -25,7 +25,8 @@ export async function login(req: Request, res: Response) {
     }
 
     const token = createToken(user._id);
-    res.status(200).json({user_id: user._id, token});
+    console.log(token)
+    res.status(200).json({data: {user_id: user._id, token}});
   } catch (error) {
     res.status(500).json(error.message);
   }
