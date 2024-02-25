@@ -23,9 +23,8 @@ export async function login(req: Request, res: Response) {
     if (!match) {
         throw Error("Invalid Password");
     }
-
     const token = createToken(user._id);
-    console.log(token)
+    console.log(token);
     res.status(200).json({data: {user_id: user._id, token}});
   } catch (error) {
     res.status(500).json(error.message);

@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use("/api/auth", authRouter);
+app.use("/auth", authRouter);
 
 mongoose.connect(process.env.MONG_URL)
     .then(() => {

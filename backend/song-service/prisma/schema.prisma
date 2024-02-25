@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// use "prisma migrate dev" or "prisma db push" to update
+// use "npx prisma migrate dev" or "npx prisma db push" to update
 
 
 generator client {
@@ -13,13 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// update Song object type if schema changed
 model Song {
   id        Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   artist    String   @db.VarChar(255)
-  authorId  Int
+  authorId  String
   body      String
   
 }

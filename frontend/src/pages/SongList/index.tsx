@@ -10,7 +10,7 @@ export default function SongList() {
     const res = await getAllSongs();
     console.log(res);
     if (res && res.data) {
-      setSongs(res.data)
+      setSongs(res.data.data)
     } else {
       console.log(res.errors);
     }
