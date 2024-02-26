@@ -1,7 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { loginUser, registerUser } from "../serviceClients/userService/userService";
+import { loginUser, registerUser } from "../serviceClients/user/user.serviceClient";
 import { UserAuthentication } from "../interfaces/userService/userAuthentication";
 import { jwtDecode } from "jwt-decode";
+import { UserCreateDTO } from "../interfaces/userService/user/createDTO";
+import { UserLoginDTO } from "../interfaces/userService/login";
 
 type JWToken = {
   exp: number;
@@ -11,8 +13,8 @@ type JWToken = {
 
 interface AuthContextType {
   currentUser: UserAuthentication | null;
-  login: (username: string, password: string) => Promise<boolean | void>;
-  register: (username: string, email: string, password: string) => Promise<boolean | void>;
+  login: (input: UserLoginDTO) => Promise<boolean | void>;
+  register: (input: UserCreateDTO) => Promise<boolean | void>;
   logout: () => void;
   loginError: string;
   registerError: string;
@@ -36,8 +38,8 @@ interface AuthContextType {
     const [loginError, setLoginError] = useState<string>("");
     const [registerError, setRegisterError] = useState<string>("");
 
-    const login = useCallback(async (username: string, password: string) => {
-      const response = await loginUser(username, password);
+    const login = useCallback(async (input: UserLoginDTO) => {
+      const response = await loginUser(input);
       setLoginError("")
       if (response.success && response.data) {
         // login success
@@ -51,8 +53,8 @@ interface AuthContextType {
       }
     }, [])
 
-    const register = useCallback(async (username: string, email: string, password: string) => {
-      const response = await registerUser(username, email, password);
+    const register = useCallback(async (input: UserCreateDTO) => {
+      const response = await registerUser(input);
       setRegisterError("");
       if (response.success) {
         return true;

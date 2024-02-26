@@ -6,29 +6,29 @@ export default function LoginPage() {
   const { currentUser, login, loginError } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState<string>("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   async function onLogin() {
     setLoading(true);
-    const isSuccess = await login(username, password);
+    const isSuccess = await login({usernameOrEmail, password});
     setLoading(false);
     if (isSuccess) {
       navigate("/");
     } else {
-      // reset inputs
-      setUsername("");
+      // reset inputs on fail
+      setUsernameOrEmail("");
       setPassword("");
     }
   }
 
   return (
     <div>
-      <label>Username</label>
+      <label>Username or Email</label>
       <input
-        value={username}
-        onChange={e => setUsername(e.target.value)}
+        value={usernameOrEmail}
+        onChange={e => setUsernameOrEmail(e.target.value)}
       />
       <label>Password</label>
       <input

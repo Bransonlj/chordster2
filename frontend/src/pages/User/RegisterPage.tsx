@@ -3,27 +3,20 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  const { register, registerError } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  // user boolean flag?
-  const [error, setError] = useState<string>("");
 
   async function onRegister() {
     setLoading(true);
-    const isSuccess = await register(username, email, password);
+    const isSuccess = await register({username, email, password});
     setLoading(false);
     if (isSuccess) {
-      setError("");
-      console.log("success!");
-      navigate("/login");
-    } else {
-      setError("Invalid");
-      console.log("failed")
+      navigate("/user/login");
     }
   }
 
@@ -46,7 +39,7 @@ export default function RegisterPage() {
       />
       <button onClick={onRegister} disabled={loading}>Register</button>
       {
-        error && <span>{error}</span>
+        registerError && <span>{registerError}</span>
       }
   </div>
   )

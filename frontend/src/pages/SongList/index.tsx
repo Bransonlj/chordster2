@@ -9,7 +9,6 @@ export default function SongList() {
 
   async function loadSongs() {
     const res = await SongServiceClient.findAll();
-    console.log(res);
     if (res && res.data) {
       setSongs(res.data.data)
     } else {
