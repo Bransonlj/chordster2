@@ -1,5 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { ErrorResponse } from "../../interfaces/errorResponse";
+import axios from "axios";
 import { ServiceResponse } from "../../interfaces/serviceResponse";
 import { DataRecord } from "../../interfaces/songService/dataRecord";
 import { SongCreateDTO } from "../../interfaces/songService/song/createDTO";
