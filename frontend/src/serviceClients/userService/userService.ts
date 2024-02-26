@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ServiceResponse } from "../../interfaces/serviceResponse";
 import { UserAuthentication } from "../../interfaces/userService/userAuthentication";
 import serviceRegistry from "../serviceRegistry";
@@ -5,6 +6,7 @@ import serviceRegistry from "../serviceRegistry";
 const serviceUri = serviceRegistry.userService;
 
 export async function loginUser(username: string, password: string): Promise<ServiceResponse<UserAuthentication>> {// should return token 
+  //const res = await axios.post<UserAuthentication>
   try {
     const res = await fetch(`${serviceUri}/auth/login`, {
       method: "POST",
@@ -14,8 +16,7 @@ export async function loginUser(username: string, password: string): Promise<Ser
   
     const data = await res.json();
     if (!res.ok) {
-      console.log(data)
-      throw Error(data.error)
+      throw Error(data)
     }
     const result: ServiceResponse<UserAuthentication> = {
       success: true,
@@ -34,7 +35,7 @@ export async function loginUser(username: string, password: string): Promise<Ser
   }
 }
 
-export async function registerUser(username: string, email: string, password: string): Promise<ServiceResponse<null>> {// should return token 
+export async function registerUser(username: string, email: string, password: string): Promise<ServiceResponse<null>> {
   try {
     const res = await fetch(`${serviceUri}/auth/register`, {
       method: "POST",
@@ -44,8 +45,7 @@ export async function registerUser(username: string, email: string, password: st
   
     const data = await res.json();
     if (!res.ok) {
-      console.log(data)
-      throw Error(data.error)
+      throw Error(data)
     }
     const result: ServiceResponse<null> = {
       success: true,

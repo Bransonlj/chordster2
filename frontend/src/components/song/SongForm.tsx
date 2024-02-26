@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.css';
-import SongService from '../../services/songService/songService';
+import SongServiceClient from '../../serviceClients/song/song.serviceClient';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Song } from '../../interfaces/songService/song/object';
@@ -35,13 +35,13 @@ export default function SongForm({ song }: SongFormProps) {
     } else {
       let result: ServiceResponse<Song>;
       if (song) {
-        result = await SongService.update({
+        result = await SongServiceClient.update({
           title,
           artist,
           body
         }, song.id, currentUser);
       } else {
-        result = await SongService.create({
+        result = await SongServiceClient.create({
           title,
           artist,
           body

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { loginUser, registerUser } from "../services/userService/userService";
+import { loginUser, registerUser } from "../serviceClients/userService/userService";
 import { UserAuthentication } from "../interfaces/userService/userAuthentication";
 import { jwtDecode } from "jwt-decode";
 
@@ -14,6 +14,8 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean | void>;
   register: (username: string, email: string, password: string) => Promise<boolean | void>;
   logout: () => void;
+  loginError: string;
+  registerError: string;
 }
 
   const AuthContext = createContext<AuthContextType>({
@@ -21,6 +23,8 @@ interface AuthContextType {
     login: () => Promise.resolve(),
     register: () => Promise.resolve(),
     logout: () => {},
+    loginError: "",
+    registerError: "",
   });
 
   export function useAuth() {
@@ -29,10 +33,12 @@ interface AuthContextType {
 
   export function AuthProvider({ children }: {children: React.ReactNode}) {
     const [currentUser, setCurrentUser] = useState<UserAuthentication | null>(null);
+    const [loginError, setLoginError] = useState<string>("");
+    const [registerError, setRegisterError] = useState<string>("");
 
     const login = useCallback(async (username: string, password: string) => {
       const response = await loginUser(username, password);
-      console.log(response);
+      setLoginError("")
       if (response.success && response.data) {
         // login success
         setCurrentUser(response.data);
@@ -40,15 +46,18 @@ interface AuthContextType {
         localStorage.setItem('user', JSON.stringify(response.data));
         return true;
       } else {
+        setLoginError(response.errors.join());
         return false;
       }
     }, [])
 
     const register = useCallback(async (username: string, email: string, password: string) => {
       const response = await registerUser(username, email, password);
+      setRegisterError("");
       if (response.success) {
         return true;
       } else {
+        setRegisterError(response.errors.join());
         return false;
       }
     }, [])
@@ -81,12 +90,16 @@ interface AuthContextType {
         login, 
         register, 
         logout,
+        loginError,
+        registerError,
       }), 
       [
         currentUser,
         login,
         register,
         logout,
+        loginError,
+        registerError,
       ]);
 
       return (

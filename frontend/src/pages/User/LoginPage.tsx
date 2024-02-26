@@ -3,33 +3,25 @@ import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
-  const { currentUser, login } = useAuth();
+  const { currentUser, login, loginError } = useAuth();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  // user boolean flag?
-  const [error, setError] = useState<string>("");
 
   async function onLogin() {
     setLoading(true);
     const isSuccess = await login(username, password);
     setLoading(false);
     if (isSuccess) {
-      setError("");
-      console.log("success!");
+      navigate("/");
     } else {
-      setError("Invalid username or password");
-      console.log("failed")
+      // reset inputs
+      setUsername("");
+      setPassword("");
     }
   }
-
-  useEffect(() => {
-    if (currentUser) {
-      navigate("/");
-    }
-  }, [currentUser]);
 
   return (
     <div>
@@ -45,7 +37,7 @@ export default function LoginPage() {
       />
       <button onClick={onLogin} disabled={loading}>Login</button>
       {
-        error && <span>{error}</span>
+        loginError && <span>{loginError}</span>
       }
     </div>
   )

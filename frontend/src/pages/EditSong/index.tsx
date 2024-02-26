@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext';
-import SongService from '../../services/songService/songService';
 import { useParams } from 'react-router-dom';
 import { Song } from '../../interfaces/songService/song/object';
 import SongForm from '../../components/song/SongForm';
+import SongServiceClient from '../../serviceClients/song/song.serviceClient';
 
 export default function EditSong() {
 
@@ -19,7 +19,7 @@ export default function EditSong() {
       setError("Empty id");
       return
     }
-    const result = await SongService.findById(id)
+    const result = await SongServiceClient.findById(id)
     if (!result.success || !result.data) {
       setError(result.errors.join());
       return;

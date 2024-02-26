@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Song } from '../../interfaces/songService/song/object'
 import { useNavigate, useParams } from 'react-router-dom';
-import SongService from '../../services/songService/songService';
 import { useAuth } from '../../context/AuthContext';
 import { NavLink } from 'react-router-dom';
+import SongServiceClient from '../../serviceClients/song/song.serviceClient';
 
 export default function SongPage() {
 
@@ -14,19 +14,25 @@ export default function SongPage() {
   const { id } = useParams();
   const navigate= useNavigate();
 
-  async function fetchSong(id: string) {
-    const result = await SongService.findById(id)
-    if (result.success && result.data) {
-      setSong(result.data);
-    } else {
-      setError(result.errors.join());
+  async function fetchSong() {
+    setError("");
+    if (!id) {
+      setError("Empty id");
+      return
     }
+    const result = await SongServiceClient.findById(id)
+    if (!result.success || !result.data) {
+      setError(result.errors.join());
+      return
+    }
+    setSong(result.data);
+
   }
 
   async function handleDelete() {
     if (id && currentUser) {
       if (confirm("delete song?")) {
-        const result = await SongService.delete(id, currentUser);
+        const result = await SongServiceClient.delete(id, currentUser);
         if (result.success) {
           alert("successfully deleted")
           navigate("/song");
@@ -39,12 +45,7 @@ export default function SongPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    setError("");
-    if (id) {
-      fetchSong(id);
-    } else {
-      setError("Empty id");
-    }
+    fetchSong();
     setIsLoading(false);
   }, [id])
 
