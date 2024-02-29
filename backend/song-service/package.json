@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev:migrate": "npx prisma db push && concurrently \"tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "keywords": [],
   "author": "",

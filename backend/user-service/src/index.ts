@@ -28,7 +28,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/auth", authRouter.registerRoutes());
 
-mongoose.connect(process.env.MONG_URL)
+mongoose.connect(process.env.DATABASE_URL)
     .then(() => {
       app.listen(port, () => {
         console.log(
